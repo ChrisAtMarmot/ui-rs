@@ -1,6 +1,6 @@
 {
   "name": "@reshare/rs",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "description": "Resource Sharing",
   "main": "src/index.js",
   "repository": "",
@@ -8,23 +8,17 @@
   "scripts": {
     "start": "stripes serve",
     "build": "stripes build --output ./output",
-    "test-int": "stripes test nightmare --run demo --show",
-    "test": "stripes test karma",
     "lint": "eslint src"
   },
   "devDependencies": {
-    "@folio/eslint-config-stripes": "^6.0.0",
-    "@folio/stripes-cli": "~2.4.0",
-    "chai": "^4.2.0",
-    "eslint": "^7.0.0",
-    "mocha": "^5.2.0",
-    "sinon": "^6.3.4"
+    "@folio/eslint-config-stripes": "^6.1.0",
+    "@folio/stripes-cli": "~2.5.0",
+    "eslint": "^7.0.0"
   },
   "dependencies": {
-    "@folio/react-intl-safe-html": "^3.0.0",
-    "@folio/stripes-erm-components": "^5.0.0",
+    "@folio/stripes-erm-components": "^6.1.0",
     "@folio/stripes-template-editor": "^3.0.0",
-    "@k-int/stripes-kint-components": "^2.1.2",
+    "@k-int/stripes-kint-components": "^2.5.1",
     "@reshare/stripes-reshare": "^1.7.0",
     "classnames": "^2.2.6",
     "compose-function": "^3.0.3",
