@@ -14,9 +14,10 @@ import {
   MultiColumnList,
   Pane,
   PaneMenu,
+  MenuSection,
 } from '@folio/stripes/components';
 import { AppIcon, IfPermission } from '@folio/stripes/core';
-import { SearchAndSortQuery, PersistedPaneset } from '@folio/stripes/smart-components';
+import { SearchAndSortQuery, PersistedPaneset, ColumnManager } from '@folio/stripes/smart-components';
 import AppNameContext from '../../AppNameContext';
 import PrintAllPullSlips from '../PrintAllPullSlips';
 import Filters from './Filters';
@@ -28,8 +29,7 @@ const appDetails = {
     visibleColumns: [
       'flags', 'hrid',
       'dateCreated', 'lastUpdated', 'selectedItemBarcode', 'patronIdentifier', 'state', 'serviceType',
-      'supplyingInstitutionSymbol', 'pickupLocation',
-      'title',
+      'supplyingInstitutionSymbol', 'pickupLocation', 'title',
     ],
     extraFilter: 'r.true',
     intlId: 'supplier',
@@ -42,8 +42,7 @@ const appDetails = {
     visibleColumns: [
       'flags', 'hrid',
       'dateCreated', 'state', 'serviceType',
-      'requestingInstitutionSymbol', 'selectedItemBarcode', 'pickLocation',
-      'title',
+      'requestingInstitutionSymbol', 'selectedItemBarcode', 'pickLocation', 'title',
     ],
     extraFilter: 'r.false',
     intlId: 'requester',
@@ -64,11 +63,36 @@ const PatronRequests = ({ requestsQuery, queryGetter, querySetter, filterOptions
   const totalCount = requestsQuery?.data?.pages?.[0]?.total;
   const parsedParams = queryString.parse(location.search);
   const sortOrder = parsedParams.sort || '';
+
+  const columnMapping = {
+    flags: '',
+    hrid: <FormattedMessage id="ui-rs.patronrequests.id" />,
+    isRequester: <FormattedMessage id="ui-rs.patronrequests.isRequester" />,
+    dateCreated: <FormattedMessage id="ui-rs.patronrequests.dateCreated" />,
+    lastUpdated: <FormattedMessage id="ui-rs.patronrequests.lastUpdated" />,
+    title: <FormattedMessage id="ui-rs.patronrequests.title" />,
+    patronIdentifier: <FormattedMessage id="ui-rs.patronrequests.patronIdentifier" />,
+    state: <FormattedMessage id="ui-rs.patronrequests.state" />,
+    serviceType: <FormattedMessage id="ui-rs.patronrequests.serviceType" />,
+    requestingInstitutionSymbol: <FormattedMessage id="ui-rs.patronrequests.requestingInstitutionSymbol" />,
+    supplyingInstitutionSymbol: <FormattedMessage id="ui-rs.patronrequests.supplyingInstitutionSymbol" />,
+    selectedItemBarcode: <FormattedMessage id="ui-rs.patronrequests.selectedItemBarcode" />,
+    pickLocation: <FormattedMessage id="ui-rs.patronrequests.pickLocation" />,
+    pickupLocation: <FormattedMessage id="ui-rs.patronrequests.pickupLocation" />,
+  };
+
+  const VISIBLE_COLUMNS_STORAGE_KEY = 'request-supply-visible-columns-key';
+  const NON_TOGGLEABLE_COLUMNS = ['flags', 'hrid', 'title'];
+
   const fetchMore = (_askAmount, index) => {
     requestsQuery.fetchNextPage({ pageParam: index });
   };
 
-  const getActionMenu = () => (
+  const getActionMenu = renderColumnsMenu => ({ onToggle }) => {
+    
+    return (
+    <>
+    <MenuSection label="Actions" id="columns-menu-actions-section">
     <Link to={`${match.url}/printslips${location.search}`}>
       <FormattedMessage id="ui-rs.printAllPullSlips">
         {ariaLabel => (
@@ -82,12 +106,19 @@ const PatronRequests = ({ requestsQuery, queryGetter, querySetter, filterOptions
         )}
       </FormattedMessage>
     </Link>
-  );
+    </MenuSection>
+    {renderColumnsMenu}
+    </>
+  )};
 
-  const { title, visibleColumns, createPerm } = appDetails[appName];
+  const { title, createPerm } = appDetails[appName];
 
   if (match.params.action === 'printslips') {
     return <PrintAllPullSlips query={requestsQuery} />;
+  }
+
+  const columnManagerProps = {
+    excludeKeys: ['flags', 'hrid', 'title']
   }
 
   return (
@@ -137,9 +168,15 @@ const PatronRequests = ({ requestsQuery, queryGetter, querySetter, filterOptions
                   }
                 </form>
               </Pane>
-              {requestsQuery.isSuccess ?
+              <ColumnManager
+                id={VISIBLE_COLUMNS_STORAGE_KEY}
+                columnMapping={columnMapping}
+                excludeKeys={NON_TOGGLEABLE_COLUMNS}
+              >
+              {({ renderColumnsMenu, visibleColumns }) => (
+              requestsQuery.isSuccess ?
                 <Pane
-                  actionMenu={getActionMenu}
+                  actionMenu={getActionMenu(renderColumnsMenu)}
                   appIcon={<AppIcon app={appName} iconKey="app" size="small" />}
                   defaultWidth="fill"
                   lastMenu={(
@@ -167,22 +204,7 @@ const PatronRequests = ({ requestsQuery, queryGetter, querySetter, filterOptions
                 >
                   <MultiColumnList
                     autosize
-                    columnMapping={{
-                      flags: '',
-                      hrid: <FormattedMessage id="ui-rs.patronrequests.id" />,
-                      isRequester: <FormattedMessage id="ui-rs.patronrequests.isRequester" />,
-                      dateCreated: <FormattedMessage id="ui-rs.patronrequests.dateCreated" />,
-                      lastUpdated: <FormattedMessage id="ui-rs.patronrequests.lastUpdated" />,
-                      title: <FormattedMessage id="ui-rs.patronrequests.title" />,
-                      patronIdentifier: <FormattedMessage id="ui-rs.patronrequests.patronIdentifier" />,
-                      state: <FormattedMessage id="ui-rs.patronrequests.state" />,
-                      serviceType: <FormattedMessage id="ui-rs.patronrequests.serviceType" />,
-                      requestingInstitutionSymbol: <FormattedMessage id="ui-rs.patronrequests.requestingInstitutionSymbol" />,
-                      supplyingInstitutionSymbol: <FormattedMessage id="ui-rs.patronrequests.supplyingInstitutionSymbol" />,
-                      selectedItemBarcode: <FormattedMessage id="ui-rs.patronrequests.selectedItemBarcode" />,
-                      pickLocation: <FormattedMessage id="ui-rs.patronrequests.pickLocation" />,
-                      pickupLocation: <FormattedMessage id="ui-rs.patronrequests.pickupLocation" />,
-                    }}
+                    columnMapping={columnMapping}
                     columnWidths={{
                       flags: '48px',
                       id: { max: 115 },
@@ -253,7 +275,8 @@ const PatronRequests = ({ requestsQuery, queryGetter, querySetter, filterOptions
                   />
                 </Pane>
                 : <LoadingPane />
-              }
+              )}
+              </ColumnManager>
               {children}
             </PersistedPaneset>
           </div>
