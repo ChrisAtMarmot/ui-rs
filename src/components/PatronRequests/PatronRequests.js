@@ -81,8 +81,14 @@ const PatronRequests = ({ requestsQuery, queryGetter, querySetter, filterOptions
     pickupLocation: <FormattedMessage id="ui-rs.patronrequests.pickupLocation" />,
   };
 
-  const VISIBLE_COLUMNS_STORAGE_KEY = 'request-supply-visible-columns-key';
-  const NON_TOGGLEABLE_COLUMNS = ['flags', 'hrid', 'title'];
+  // setup toggeled columns
+  let VISIBLE_COLUMNS_STORAGE_KEY = 'request-visible-columns-key'
+  let NON_TOGGLEABLE_COLUMNS      = ['hrid', 'title'];
+  const { title, createPerm, visibleColumns } = appDetails[appName];
+
+  if (appName == "request") {
+     VISIBLE_COLUMNS_STORAGE_KEY = 'supply-visible-columns-key';
+  }
 
   const fetchMore = (_askAmount, index) => {
     requestsQuery.fetchNextPage({ pageParam: index });
@@ -111,14 +117,8 @@ const PatronRequests = ({ requestsQuery, queryGetter, querySetter, filterOptions
     </>
   )};
 
-  const { title, createPerm } = appDetails[appName];
-
   if (match.params.action === 'printslips') {
     return <PrintAllPullSlips query={requestsQuery} />;
-  }
-
-  const columnManagerProps = {
-    excludeKeys: ['flags', 'hrid', 'title']
   }
 
   return (
@@ -172,6 +172,7 @@ const PatronRequests = ({ requestsQuery, queryGetter, querySetter, filterOptions
                 id={VISIBLE_COLUMNS_STORAGE_KEY}
                 columnMapping={columnMapping}
                 excludeKeys={NON_TOGGLEABLE_COLUMNS}
+                persist={true}
               >
               {({ renderColumnsMenu, visibleColumns }) => (
               requestsQuery.isSuccess ?
