@@ -83,7 +83,7 @@ const PatronRequests = ({ requestsQuery, queryGetter, querySetter, filterOptions
 
   // setup toggeled columns
   let VISIBLE_COLUMNS_STORAGE_KEY = 'request-visible-columns-key'
-  let NON_TOGGLEABLE_COLUMNS      = ['hrid', 'title'];
+  const NON_TOGGLEABLE_COLUMNS      = ['hrid', 'title'];
   const { title, createPerm, visibleColumns } = appDetails[appName];
 
   if (appName == "request") {
@@ -173,6 +173,7 @@ const PatronRequests = ({ requestsQuery, queryGetter, querySetter, filterOptions
                 columnMapping={columnMapping}
                 excludeKeys={NON_TOGGLEABLE_COLUMNS}
                 persist={true}
+                visibleColumns={visibleColumns}
               >
               {({ renderColumnsMenu, visibleColumns }) => (
               requestsQuery.isSuccess ?
