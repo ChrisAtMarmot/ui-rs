@@ -12,6 +12,14 @@ export default {
       token: 'item.materialType',
       previewValue: 'Serial',
     },
+    {
+        token: 'item.location',
+      previewValue: 'MAIN',
+    },
+    {
+        token: 'item.shelvingLocation',
+      previewValue: 'STACKS',
+    }
   ],
   user: [
     {
@@ -27,8 +35,8 @@ export default {
       previewValue: '456123789',
     },
     {
-        token: 'user.patronProfile',
-        previewValue: 'Patron profile'
+      token: 'user.patronProfile',
+      previewValue: 'Patron profile'
     }
   ],
   request: [
