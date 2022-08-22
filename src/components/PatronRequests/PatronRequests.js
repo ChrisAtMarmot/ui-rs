@@ -82,10 +82,10 @@ const PatronRequests = ({ requestsQuery, queryGetter, querySetter, filterOptions
   };
 
   // setup toggeled columns
-  let VISIBLE_COLUMNS_STORAGE_KEY = 'request-visible-columns-key'
-  const NON_TOGGLEABLE_COLUMNS      = ['hrid', 'title'];
+  const NON_TOGGLEABLE_COLUMNS = ['hrid', 'title'];
   const { title, createPerm, visibleColumns } = appDetails[appName];
 
+  let VISIBLE_COLUMNS_STORAGE_KEY = 'request-visible-columns-key'
   if (appName == "request") {
      VISIBLE_COLUMNS_STORAGE_KEY = 'supply-visible-columns-key';
   }
@@ -94,7 +94,7 @@ const PatronRequests = ({ requestsQuery, queryGetter, querySetter, filterOptions
     requestsQuery.fetchNextPage({ pageParam: index });
   };
 
-  const getActionMenu = renderColumnsMenu => ({ onToggle }) => {
+  const getActionMenu = renderColumnsMenu => ({ }) => {
     
     return (
     <>
