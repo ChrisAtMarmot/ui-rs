@@ -94,7 +94,7 @@ const PatronRequests = ({ requestsQuery, queryGetter, querySetter, filterOptions
     requestsQuery.fetchNextPage({ pageParam: index });
   };
 
-  const getActionMenu = renderColumnsMenu => ({ }) => {
+  const getActionMenu = renderColumnsMenu => ({ visibleColumns }) => {
     
     return (
     <>
@@ -140,6 +140,7 @@ const PatronRequests = ({ requestsQuery, queryGetter, querySetter, filterOptions
           resetAll,
           searchChanged,
           searchValue,
+          visibleColumns
         }) => (
           <div>
             <PersistedPaneset
@@ -204,7 +205,9 @@ const PatronRequests = ({ requestsQuery, queryGetter, querySetter, filterOptions
                     /> : ''}
                   paneTitle={title}
                 >
+                {console.log(visibleColumns)}
                   <MultiColumnList
+                    visibleColumns={visibleColumns}
                     autosize
                     columnMapping={columnMapping}
                     columnWidths={{
@@ -273,7 +276,6 @@ const PatronRequests = ({ requestsQuery, queryGetter, querySetter, filterOptions
                     sortDirection={sortOrder.startsWith('-') ? 'descending' : 'ascending'}
                     totalCount={totalCount}
                     virtualize
-                    visibleColumns={visibleColumns}
                   />
                 </Pane>
                 : <LoadingPane />
