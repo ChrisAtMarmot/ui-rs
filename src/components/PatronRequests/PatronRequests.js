@@ -255,6 +255,7 @@ const PatronRequests = ({ requestsQuery, queryGetter, querySetter, filterOptions
                       serviceType: a => a.serviceType && a.serviceType.value,
                       supplyingInstitutionSymbol: a => (a?.resolvedSupplier?.owner?.symbolSummary ?? '').replace(/,.*/, ''),
                       pickLocation: a => a.pickLocation && a.pickLocation.name,
+                      pickShelvingLocation: a => a.pickShelvingLocation && a.pickShelvingLocation.name,
                       selectedItemBarcode: a => (a.volumes?.length <= 1 ? a.volumes[0]?.itemId : <FormattedMessage id="ui-rs.flow.info.itemBarcode.multiVolRequest" />)
                     }}
                     hasMargin
